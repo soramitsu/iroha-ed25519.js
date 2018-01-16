@@ -6,16 +6,18 @@ exports.createKeyPair = function(){
 
   var privKeyPtr = Module._malloc(32)
   var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 32)
-
+  
   Module._ed25519_create_keypair(privKeyPtr, pubKeyPtr)
+
+  res = {
+    publicKey: new Buffer(pubKey),
+    privateKey: new Buffer(privKey)
+  }
 
   Module._free(pubKeyPtr)
   Module._free(privKeyPtr)
 
-  return {
-    publicKey: new Buffer(pubKey),
-    privateKey: new Buffer(privKey)
-  }
+  return res;
 }
 
 exports.derivePublicKey = function(privateKey){
@@ -29,10 +31,12 @@ exports.derivePublicKey = function(privateKey){
 
   Module._ed25519_derive_public_key(privKeyPtr, pubKeyPtr)
 
+  res = new Buffer(pubKey)
+
   Module._free(pubKeyPtr)
   Module._free(privKeyPtr)
 
-  return new Buffer(pubKey)
+  return res
 }
 
 exports.sign = function(message, publicKey, privateKey){
@@ -57,12 +61,14 @@ exports.sign = function(message, publicKey, privateKey){
 
   Module._ed25519_sign(sigPtr, msgPtr, msgLen, pubKeyPtr, privKeyPtr)
 
+  res = new Buffer(sig)
+
   Module._free(msgPtr)
   Module._free(pubKeyPtr)
   Module._free(privKeyPtr)
   Module._free(sigPtr)
 
-  return new Buffer(sig)
+  return res
 }
 
 exports.verify = function(signature, message, publicKey){
@@ -82,9 +88,11 @@ exports.verify = function(signature, message, publicKey){
   var sig = new Uint8Array(Module.HEAPU8.buffer, sigPtr, 64)
   sig.set(signature)
 
+  res = Module._ed25519_verify(sigPtr, msgPtr, msgLen, pubKeyPtr) === 1
+
   Module._free(msgPtr)
   Module._free(pubKeyPtr)
   Module._free(sigPtr)
 
-  return Module._ed25519_verify(sigPtr, msgPtr, msgLen, pubKeyPtr) === 1
+  return res
 }
