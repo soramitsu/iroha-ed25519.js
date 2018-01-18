@@ -1,0 +1,4 @@
+lib/ed25519.js
+.npmignore
+.gitignore
+.vscode
