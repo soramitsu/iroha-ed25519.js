@@ -37,9 +37,12 @@ console.log(isVerified)
 - [x] Use Standard.js
 - [x] Add PreCommit/Push hooks
 - [x] Write an example to readme
+- [x] License
 - [ ] Create NPM package
 - [ ] Uglify/Minify
 - [ ] JSDoc
 - [ ] Compile library from C++ on the fly
 - [ ] More tests
 
+## License
+[Apache License 2.0](LICENSE.md)
