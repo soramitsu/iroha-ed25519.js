@@ -1,6 +1,8 @@
-# ed25519.js [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+# ed25519.js [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A javascript port of [warchant/ed25519](https://github.com/warchant/ed25519.git) and wrapper for it.
+
+
+[warchant/ed25519](https://github.com/warchant/ed25519.git) compiled with [Emscripten](https://github.com/kripken/emscripten) and wrapper for it.
 
 ## Example
 This library produces buffers of bytes and requires buffers as input
@@ -37,9 +39,12 @@ console.log(isVerified)
 - [x] Use Standard.js
 - [x] Add PreCommit/Push hooks
 - [x] Write an example to readme
+- [x] License
 - [ ] Create NPM package
 - [ ] Uglify/Minify
 - [ ] JSDoc
 - [ ] Compile library from C++ on the fly
 - [ ] More tests
 
+## License
+[Apache License 2.0](LICENSE.md)
