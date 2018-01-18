@@ -10,8 +10,8 @@ exports.createKeyPair = function(){
   Module._ed25519_create_keypair(privKeyPtr, pubKeyPtr)
 
   result = {
-    publicKey: new Buffer(pubKey),
-    privateKey: new Buffer(privKey)
+    publicKey: Buffer.from(pubKey),
+    privateKey: Buffer.from(privKey)
   }
 
   Module._free(pubKeyPtr)
@@ -34,7 +34,7 @@ exports.derivePublicKey = function(privateKey){
 
   Module._ed25519_derive_public_key(privKeyPtr, pubKeyPtr)
 
-  result = new Buffer(pubKey)
+  result = Buffer.from(pubKey)
 
   Module._free(pubKeyPtr)
   Module._free(privKeyPtr)
@@ -68,7 +68,7 @@ exports.sign = function(message, publicKey, privateKey){
   */
   Module._ed25519_sign(sigPtr, msgPtr, msgLen, 0, pubKeyPtr, privKeyPtr)
   
-  result = new Buffer(sig)
+  result = Buffer.from(sig)
 
   Module._free(msgPtr)
   Module._free(pubKeyPtr)
