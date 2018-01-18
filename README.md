@@ -1,6 +1,6 @@
 # ed25519.js [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-A javascript port of [warchant/ed25519](https://github.com/warchant/ed25519.git) and wrapper for it.
+[warchant/ed25519](https://github.com/warchant/ed25519.git) compiled with [Emscripten](https://github.com/kripken/emscripten) and wrapper for it.
 
 ## Example
 This library produces buffers of bytes and requires buffers as input
