@@ -5,7 +5,7 @@ var privateKeys = [
   '9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60',
   '4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb',
   'c5aa8df43f9f837bedb7442f31dcb7b166d38535076f094b85ce3a2e0b4458f7',
-  '0d4a05b07352a5436e180356da0ae6efa0345ff7fb1572575772e8005ed978e9',
+  '0d4a05b07352a5436e180356da0ae6efa0345ff7fb1572575772e8005ed978e9'
 ]
 
 var publicKeys = [
@@ -29,7 +29,7 @@ var signatures = [
   'b1e9ef0d3b94326a8c96d36427e160809cb275ad6bd8e8b0746fe97e7fe4268b2c7939701f1f8727c6c53704744e4db778f0d298c4aefabcd690a82d977ed10a'
 ]
 
-test('Key pair generation', function(t){
+test('Key pair generation', function (t) {
   t.plan(4)
 
   var keys = ed25519.createKeyPair()
@@ -38,39 +38,38 @@ test('Key pair generation', function(t){
   t.is(Buffer.isBuffer(keys.privateKey), true, 'Private key is a buffer')
   t.is(keys.privateKey.length, 32, 'Private key\'s length is 32')
 
-  t.end();
+  t.end()
 })
 
-test('Deriving public key', function(t){
+test('Deriving public key', function (t) {
   t.plan(4)
-  
+
   t.is(ed25519.derivePublicKey(Buffer.from(privateKeys[0], 'hex')).toString('hex'), publicKeys[0], 'Right public key for private key ' + privateKeys[0])
   t.is(ed25519.derivePublicKey(Buffer.from(privateKeys[1], 'hex')).toString('hex'), publicKeys[1], 'Right public key for private key ' + privateKeys[1])
   t.is(ed25519.derivePublicKey(Buffer.from(privateKeys[2], 'hex')).toString('hex'), publicKeys[2], 'Right public key for private key ' + privateKeys[2])
   t.is(ed25519.derivePublicKey(Buffer.from(privateKeys[3], 'hex')).toString('hex'), publicKeys[3], 'Right public key for private key ' + privateKeys[3])
 
-  t.end();
+  t.end()
 })
 
-test('Sign test', function(t){
+test('Sign test', function (t) {
   t.plan(4)
-  
+
   t.is(ed25519.sign(Buffer.from(messages[0], 'hex'), Buffer.from(publicKeys[0], 'hex'), Buffer.from(privateKeys[0], 'hex')).toString('hex'), signatures[0], 'Right signature for message ' + messages[0] + ' with private key ' + privateKeys[0])
   t.is(ed25519.sign(Buffer.from(messages[1], 'hex'), Buffer.from(publicKeys[1], 'hex'), Buffer.from(privateKeys[1], 'hex')).toString('hex'), signatures[1], 'Right signature for message ' + messages[1] + ' with private key ' + privateKeys[1])
   t.is(ed25519.sign(Buffer.from(messages[2], 'hex'), Buffer.from(publicKeys[2], 'hex'), Buffer.from(privateKeys[2], 'hex')).toString('hex'), signatures[2], 'Right signature for message ' + messages[2] + ' with private key ' + privateKeys[2])
   t.is(ed25519.sign(Buffer.from(messages[3], 'hex'), Buffer.from(publicKeys[3], 'hex'), Buffer.from(privateKeys[3], 'hex')).toString('hex'), signatures[3], 'Right signature for message ' + messages[3] + ' with private key ' + privateKeys[3])
 
-  t.end();
+  t.end()
 })
 
-test('Verification test', function(t){
+test('Verification test', function (t) {
   t.plan(4)
-  
+
   t.is(ed25519.verify(Buffer.from(signatures[0], 'hex'), Buffer.from(messages[0], 'hex'), Buffer.from(publicKeys[0], 'hex')), true, 'Message ' + messages[0] + ' verification')
   t.is(ed25519.verify(Buffer.from(signatures[1], 'hex'), Buffer.from(messages[1], 'hex'), Buffer.from(publicKeys[1], 'hex')), true, 'Message ' + messages[1] + ' verification')
   t.is(ed25519.verify(Buffer.from(signatures[2], 'hex'), Buffer.from(messages[2], 'hex'), Buffer.from(publicKeys[2], 'hex')), true, 'Message ' + messages[2] + ' verification')
   t.is(ed25519.verify(Buffer.from(signatures[3], 'hex'), Buffer.from(messages[3], 'hex'), Buffer.from(publicKeys[3], 'hex')), true, 'Message ' + messages[3] + ' verification')
 
- 
-  t.end();
+  t.end()
 })
