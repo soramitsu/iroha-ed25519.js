@@ -1,4 +1,5 @@
-lib/ed25519.js
+/lib/ed25519.js
 .npmignore
 .gitignore
 .vscode
+/test
