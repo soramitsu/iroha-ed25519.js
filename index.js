@@ -1,32 +1,106 @@
+var Module = require('./lib/ed25519.min.js')
 
-var crypto = require('./crypto')
+exports.createKeyPair = function(){
+  var pubKeyPtr = Module._malloc(32)
+  var pubKey = new Uint8Array(Module.HEAPU8.buffer, pubKeyPtr, 32)
 
-var hexStringToBuffer = function(string){
-  var array = string.match(/.{1,2}/g)
-  array = array.map(x => parseInt(x, 16))
-  return new Buffer(array)
+  var privKeyPtr = Module._malloc(32)
+  var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 32)
+  
+  Module._ed25519_create_keypair(privKeyPtr, pubKeyPtr)
+
+  result = {
+    publicKey: new Buffer(pubKey),
+    privateKey: new Buffer(privKey)
+  }
+
+  Module._free(pubKeyPtr)
+  Module._free(privKeyPtr)
+
+  return result;
 }
 
-// public = '292a8714694095edce6be799398ed5d6244cd7be37eb813106b217d850d261f2'
-// private = '8316fe25fda2bb3964ae756251b5f1fe010fafe56443978d524dc6485548be76'
+exports.derivePublicKey = function(privateKey){
+  var privateKey = new Buffer(privateKey)
+  var privKeyPtr = Module._malloc(32)
+  var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 32)
+  privKey.set(privateKey)
 
-private = '7c877637e9010f88309d82a735ee328750b57663ae9050fc1493cc6380d5c354'
-public = '02e4e5aa82bb137e34271f84323d58d1eaa0bde729551e227a5decddcc92f310'
+  var pubKeyPtr = Module._malloc(32)
+  var pubKey = new Uint8Array(Module.HEAPU8.buffer, pubKeyPtr, 32)
 
-publicB = hexStringToBuffer(public)
-privateB = hexStringToBuffer(private)
+  Module._ed25519_derive_public_key(privKeyPtr, pubKeyPtr)
 
-publicKappa = crypto.derivePublicKey(privateB)
+  result = new Buffer(pubKey)
 
-console.log(publicKappa)
-console.log(publicB)
+  Module._free(pubKeyPtr)
+  Module._free(privKeyPtr)
 
-var message = "raw data for signing"
-var signature = crypto.sign(message, publicB, privateB)
-console.log(signature)
-console.log(crypto.verify(signature, message, publicB))
+  return result
+}
 
-keys = crypto.createKeyPair();
-console.log(keys.privateKey)
-console.log(keys.publicKey)
-console.log(crypto.derivePublicKey(keys.privateKey))
+exports.sign = function(message, publicKey, privateKey){
+  var message = new Buffer(message)
+  var msgLen = message.length
+  var msgPtr = Module._malloc(msgLen)
+  var msg = new Uint8Array(Module.HEAPU8.buffer, msgPtr, msgLen)
+  msg.set(message)
+
+  var publicKey = new Buffer(publicKey)
+  var pubKeyPtr = Module._malloc(32)
+  var pubKey = new Uint8Array(Module.HEAPU8.buffer, pubKeyPtr, 32)
+  pubKey.set(publicKey)
+
+  var privateKey = new Buffer(privateKey)
+  var privKeyPtr = Module._malloc(32)
+  var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 32)
+  privKey.set(privateKey)
+
+  var sigPtr = Module._malloc(64)
+  var sig = new Uint8Array(Module.HEAPU8.buffer, sigPtr, 64)
+
+  /* 
+    WARNING: 0 is passed to the _ed25519_sign as 4th argument due to an error in the EMSCRIPTEN.
+    In case of EMSCRIPTEN fix and correct build, testcase will fail and this 0 will be removed from here.
+  */
+  Module._ed25519_sign(sigPtr, msgPtr, msgLen, 0, pubKeyPtr, privKeyPtr)
+  
+  result = new Buffer(sig)
+
+  Module._free(msgPtr)
+  Module._free(pubKeyPtr)
+  Module._free(privKeyPtr)
+  Module._free(sigPtr)
+
+  return result
+}
+
+exports.verify = function(signature, message, publicKey){
+  var message = new Buffer(message)
+  var msgLen = message.length
+  var msgPtr = Module._malloc(msgLen)
+  var msg = new Uint8Array(Module.HEAPU8.buffer, msgPtr, msgLen)
+  msg.set(message)
+
+  var publicKey = new Buffer(publicKey, 'base64')
+  var pubKeyPtr = Module._malloc(32)
+  var pubKey = new Uint8Array(Module.HEAPU8.buffer, pubKeyPtr, 32)
+  pubKey.set(publicKey)
+
+  var signature = new Buffer(signature, 'base64')
+  var sigPtr = Module._malloc(64)
+  var sig = new Uint8Array(Module.HEAPU8.buffer, sigPtr, 64)
+  sig.set(signature)
+
+  /* 
+    WARNING: 0 is passed to the _ed25519_verify as 4th argument due to an error in the EMSCRIPTEN.
+    In case of EMSCRIPTEN fix and correct build, testcase will fail and this 0 will be removed from here.
+  */
+  result = Module._ed25519_verify(sigPtr, msgPtr, msgLen, 0, pubKeyPtr) === 1
+
+  Module._free(msgPtr)
+  Module._free(pubKeyPtr)
+  Module._free(sigPtr)
+
+  return result
+}
