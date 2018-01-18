@@ -21,7 +21,10 @@ exports.createKeyPair = function(){
 }
 
 exports.derivePublicKey = function(privateKey){
-  var privateKey = new Buffer(privateKey)
+  if(!Buffer.isBuffer(privateKey)){
+    throw new Error('Input arguments are not buffers!')
+  }
+
   var privKeyPtr = Module._malloc(32)
   var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 32)
   privKey.set(privateKey)
@@ -40,18 +43,18 @@ exports.derivePublicKey = function(privateKey){
 }
 
 exports.sign = function(message, publicKey, privateKey){
-  var message = new Buffer(message)
+  if(!Buffer.isBuffer(message) || !Buffer.isBuffer(publicKey) || !Buffer.isBuffer(privateKey)){
+    throw new Error('Input arguments are not buffers!')
+  }
   var msgLen = message.length
   var msgPtr = Module._malloc(msgLen)
   var msg = new Uint8Array(Module.HEAPU8.buffer, msgPtr, msgLen)
   msg.set(message)
 
-  var publicKey = new Buffer(publicKey)
   var pubKeyPtr = Module._malloc(32)
   var pubKey = new Uint8Array(Module.HEAPU8.buffer, pubKeyPtr, 32)
   pubKey.set(publicKey)
 
-  var privateKey = new Buffer(privateKey)
   var privKeyPtr = Module._malloc(32)
   var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 32)
   privKey.set(privateKey)
@@ -76,18 +79,19 @@ exports.sign = function(message, publicKey, privateKey){
 }
 
 exports.verify = function(signature, message, publicKey){
-  var message = new Buffer(message)
+  if(!Buffer.isBuffer(signature) || !Buffer.isBuffer(message) || !Buffer.isBuffer(publicKey)){
+    throw new Error('Input arguments are not buffers!')
+  }
+
   var msgLen = message.length
   var msgPtr = Module._malloc(msgLen)
   var msg = new Uint8Array(Module.HEAPU8.buffer, msgPtr, msgLen)
   msg.set(message)
 
-  var publicKey = new Buffer(publicKey, 'base64')
   var pubKeyPtr = Module._malloc(32)
   var pubKey = new Uint8Array(Module.HEAPU8.buffer, pubKeyPtr, 32)
   pubKey.set(publicKey)
 
-  var signature = new Buffer(signature, 'base64')
   var sigPtr = Module._malloc(64)
   var sig = new Uint8Array(Module.HEAPU8.buffer, sigPtr, 64)
   sig.set(signature)
