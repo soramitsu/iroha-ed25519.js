@@ -31,3 +31,15 @@ var isVerified = ed25519.verify(signature, message, publicKey)
 
 console.log(isVerified)
 ```
+
+## TODOs
+- [x] Write tests
+- [x] Use Standard.js
+- [x] Add PreCommit/Push hooks
+- [x] Write an example to readme
+- [ ] Create NPM package
+- [ ] Uglify/Minify
+- [ ] JSDoc
+- [ ] Compile library from C++ on the fly
+- [ ] More tests
+
