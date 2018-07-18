@@ -1,4 +1,4 @@
-# ed25519.js [![npm version](https://badge.fury.io/js/ed25519.js.svg)](https://badge.fury.io/js/ed25519.js) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+# ed25519.js [![npm version](https://badge.fury.io/js/ed25519.js.svg)](https://badge.fury.io/js/ed25519.js) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
 
@@ -46,6 +46,14 @@ var isVerified = ed25519.verify(signature, message, publicKey)
 console.log(isVerified)
 ```
 
+### TS Examples
+
+You can test typescript examples by running this command
+```
+node -r ts-node/register .examples/createKeyPair.ts
+```
+
+
 ## TODOs
 - [x] Write tests
 - [x] Use Standard.js
@@ -53,8 +61,10 @@ console.log(isVerified)
 - [x] Write an example to readme
 - [x] License
 - [x] Create NPM package
+- [x] Migrate code to TS
+- [x] Code examples in TS 
 - [ ] Uglify/Minify
-- [ ] JSDoc
+- [x] TSDoc
 - [ ] Compile library from C++ on the fly
 - [ ] More tests
 

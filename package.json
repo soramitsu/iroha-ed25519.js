@@ -3,10 +3,12 @@
   "version": "1.1.0",
   "description": "A javascript port and wrapper of https://github.com/warchant/ed25519.git",
   "main": "index.js",
+  "typings": "index.d.ts",
   "scripts": {
-    "precommit": "npm test",
-    "prepush": "npm test",
-    "test": "standard && tape test/**/*.js | tap-spec"
+    "docs": "npx typedoc --out doc --module commonjs --target ES5 --ignoreCompilerErrors --excludeExternals --hideGenerator --excludePrivate ./index.ts",
+    "lint": "npx tslint -e **/node_modules/** -e **/dist/** index.ts test/index.ts",
+    "build": "npx tsc -p ./tsconfig.json",
+    "test": "ts-node node_modules/tape/bin/tape tape test/**/*.ts | tap-spec"
   },
   "repository": {
     "type": "git",
@@ -15,14 +17,20 @@
   "author": "Vyacheslav Bikbaev <la.sintez@gmail.com>",
   "license": "Apache-2.0",
   "devDependencies": {
-    "husky": "^0.14.3",
-    "standard": "^10.0.3",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.8.0"
+    "tap-spec": "5.0.0",
+    "ts-node": "7.0.0",
+    "tslint": "5.11.0",
+    "tslint-config-standard": "7.1.0",
+    "typedoc": "0.11.1",
+    "typescript": "2.9.2"
   },
   "standard": {
     "ignore": [
       "/lib/*.js"
     ]
+  },
+  "dependencies": {
+    "@types/node": "10.5.2",
+    "tape": "4.9.1"
   }
 }
