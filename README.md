@@ -50,7 +50,7 @@ console.log(isVerified)
 
 You can test typescript examples by running this command
 ```
-node -r ts-node/register .examples/createKeyPair.ts
+node -r ts-node/register ./examples/createKeyPair.ts
 ```
 
 
