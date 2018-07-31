@@ -10,8 +10,8 @@ exports.createKeyPair = function () {
   Module._ed25519_create_keypair(privKeyPtr, pubKeyPtr)
 
   var result = {
-    publicKey: Buffer.from(pubKey),
-    privateKey: Buffer.from(privKey)
+    publicKey: new Uint8Array(pubKey),
+    privateKey: new Uint8Array(privKey)
   }
 
   Module._free(pubKeyPtr)
@@ -21,10 +21,6 @@ exports.createKeyPair = function () {
 }
 
 exports.derivePublicKey = function (privateKey) {
-  if (!Buffer.isBuffer(privateKey)) {
-    throw new Error('Input arguments are not buffers!')
-  }
-
   var privKeyPtr = Module._malloc(32)
   var privKey = new Uint8Array(Module.HEAPU8.buffer, privKeyPtr, 32)
   privKey.set(privateKey)
@@ -34,7 +30,7 @@ exports.derivePublicKey = function (privateKey) {
 
   Module._ed25519_derive_public_key(privKeyPtr, pubKeyPtr)
 
-  var result = Buffer.from(pubKey)
+  var result = new Uint8Array(pubKey)
 
   Module._free(pubKeyPtr)
   Module._free(privKeyPtr)
@@ -43,9 +39,6 @@ exports.derivePublicKey = function (privateKey) {
 }
 
 exports.sign = function (message, publicKey, privateKey) {
-  if (!Buffer.isBuffer(message) || !Buffer.isBuffer(publicKey) || !Buffer.isBuffer(privateKey)) {
-    throw new Error('Input arguments are not buffers!')
-  }
   var msgLen = message.length
   var msgPtr = Module._malloc(msgLen)
   var msg = new Uint8Array(Module.HEAPU8.buffer, msgPtr, msgLen)
@@ -68,7 +61,7 @@ exports.sign = function (message, publicKey, privateKey) {
   */
   Module._ed25519_sign(sigPtr, msgPtr, msgLen, 0, pubKeyPtr, privKeyPtr)
 
-  var result = Buffer.from(sig)
+  var result = new Uint8Array(sig)
 
   Module._free(msgPtr)
   Module._free(pubKeyPtr)
@@ -79,10 +72,6 @@ exports.sign = function (message, publicKey, privateKey) {
 }
 
 exports.verify = function (signature, message, publicKey) {
-  if (!Buffer.isBuffer(signature) || !Buffer.isBuffer(message) || !Buffer.isBuffer(publicKey)) {
-    throw new Error('Input arguments are not buffers!')
-  }
-
   var msgLen = message.length
   var msgPtr = Module._malloc(msgLen)
   var msg = new Uint8Array(Module.HEAPU8.buffer, msgPtr, msgLen)
