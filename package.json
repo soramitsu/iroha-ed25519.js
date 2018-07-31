@@ -1,7 +1,7 @@
 {
-  "name": "ed25519.js",
+  "name": "iroha-ed25519",
   "version": "1.1.0",
-  "description": "A javascript port and wrapper of https://github.com/warchant/ed25519.git",
+  "description": "A javascript port of https://github.com/warchant/ed25519.git",
   "main": "index.js",
   "scripts": {
     "precommit": "npm test",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laSinteZ/ed25519.js.git"
+    "url": "git+https://github.com/soramitsu/iroha-ed25519.js"
   },
   "author": "Vyacheslav Bikbaev <la.sintez@gmail.com>",
   "license": "Apache-2.0",
