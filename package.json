@@ -1,6 +1,6 @@
 {
   "name": "ed25519.js",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "A javascript port and wrapper of https://github.com/warchant/ed25519.git",
   "main": "index.js",
   "scripts": {
