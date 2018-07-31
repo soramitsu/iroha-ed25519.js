@@ -1,6 +1,19 @@
 var test = require('tape')
 var ed25519 = require('..')
 
+function hexStringToByte (str) {
+  if (!str) {
+    return new Uint8Array()
+  }
+
+  var a = []
+  for (var i = 0, len = str.length; i < len; i += 2) {
+    a.push(parseInt(str.substr(i, 2), 16))
+  }
+
+  return new Uint8Array(a)
+}
+
 var privateKeys = [
   '9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60',
   '4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb',
@@ -33,10 +46,10 @@ test('Key pair generation', function (t) {
   t.plan(4)
 
   var keys = ed25519.createKeyPair()
-  t.is(Buffer.isBuffer(keys.publicKey), true, 'Public key is a buffer')
   t.is(keys.publicKey.length, 32, 'Public key\'s length is 32')
-  t.is(Buffer.isBuffer(keys.privateKey), true, 'Private key is a buffer')
   t.is(keys.privateKey.length, 32, 'Private key\'s length is 32')
+  t.is(Object.prototype.toString.call(keys.publicKey), '[object Uint8Array]', 'Public key is Uint8Array')
+  t.is(Object.prototype.toString.call(keys.privateKey), '[object Uint8Array]', 'Private key is Uint8Array')
 
   t.end()
 })
@@ -44,10 +57,10 @@ test('Key pair generation', function (t) {
 test('Deriving public key', function (t) {
   t.plan(4)
 
-  t.is(ed25519.derivePublicKey(Buffer.from(privateKeys[0], 'hex')).toString('hex'), publicKeys[0], 'Right public key for private key ' + privateKeys[0])
-  t.is(ed25519.derivePublicKey(Buffer.from(privateKeys[1], 'hex')).toString('hex'), publicKeys[1], 'Right public key for private key ' + privateKeys[1])
-  t.is(ed25519.derivePublicKey(Buffer.from(privateKeys[2], 'hex')).toString('hex'), publicKeys[2], 'Right public key for private key ' + privateKeys[2])
-  t.is(ed25519.derivePublicKey(Buffer.from(privateKeys[3], 'hex')).toString('hex'), publicKeys[3], 'Right public key for private key ' + privateKeys[3])
+  t.is(ed25519.derivePublicKey(hexStringToByte(privateKeys[0])).toString(), hexStringToByte(publicKeys[0]).toString(), 'Right public key for private key ' + privateKeys[0])
+  t.is(ed25519.derivePublicKey(hexStringToByte(privateKeys[1])).toString(), hexStringToByte(publicKeys[1]).toString(), 'Right public key for private key ' + privateKeys[1])
+  t.is(ed25519.derivePublicKey(hexStringToByte(privateKeys[2])).toString(), hexStringToByte(publicKeys[2]).toString(), 'Right public key for private key ' + privateKeys[2])
+  t.is(ed25519.derivePublicKey(hexStringToByte(privateKeys[3])).toString(), hexStringToByte(publicKeys[3]).toString(), 'Right public key for private key ' + privateKeys[3])
 
   t.end()
 })
@@ -55,10 +68,10 @@ test('Deriving public key', function (t) {
 test('Sign test', function (t) {
   t.plan(4)
 
-  t.is(ed25519.sign(Buffer.from(messages[0], 'hex'), Buffer.from(publicKeys[0], 'hex'), Buffer.from(privateKeys[0], 'hex')).toString('hex'), signatures[0], 'Right signature for message ' + messages[0] + ' with private key ' + privateKeys[0])
-  t.is(ed25519.sign(Buffer.from(messages[1], 'hex'), Buffer.from(publicKeys[1], 'hex'), Buffer.from(privateKeys[1], 'hex')).toString('hex'), signatures[1], 'Right signature for message ' + messages[1] + ' with private key ' + privateKeys[1])
-  t.is(ed25519.sign(Buffer.from(messages[2], 'hex'), Buffer.from(publicKeys[2], 'hex'), Buffer.from(privateKeys[2], 'hex')).toString('hex'), signatures[2], 'Right signature for message ' + messages[2] + ' with private key ' + privateKeys[2])
-  t.is(ed25519.sign(Buffer.from(messages[3], 'hex'), Buffer.from(publicKeys[3], 'hex'), Buffer.from(privateKeys[3], 'hex')).toString('hex'), signatures[3], 'Right signature for message ' + messages[3] + ' with private key ' + privateKeys[3])
+  t.is(ed25519.sign(hexStringToByte(messages[0]), hexStringToByte(publicKeys[0]), hexStringToByte(privateKeys[0])).toString(), hexStringToByte(signatures[0]).toString(), 'Right signature for message ' + messages[0] + ' with private key ' + privateKeys[0])
+  t.is(ed25519.sign(hexStringToByte(messages[1]), hexStringToByte(publicKeys[1]), hexStringToByte(privateKeys[1])).toString(), hexStringToByte(signatures[1]).toString(), 'Right signature for message ' + messages[1] + ' with private key ' + privateKeys[1])
+  t.is(ed25519.sign(hexStringToByte(messages[2]), hexStringToByte(publicKeys[2]), hexStringToByte(privateKeys[2])).toString(), hexStringToByte(signatures[2]).toString(), 'Right signature for message ' + messages[2] + ' with private key ' + privateKeys[2])
+  t.is(ed25519.sign(hexStringToByte(messages[3]), hexStringToByte(publicKeys[3]), hexStringToByte(privateKeys[3])).toString(), hexStringToByte(signatures[3]).toString(), 'Right signature for message ' + messages[3] + ' with private key ' + privateKeys[3])
 
   t.end()
 })
@@ -66,10 +79,10 @@ test('Sign test', function (t) {
 test('Verification test', function (t) {
   t.plan(4)
 
-  t.is(ed25519.verify(Buffer.from(signatures[0], 'hex'), Buffer.from(messages[0], 'hex'), Buffer.from(publicKeys[0], 'hex')), true, 'Message ' + messages[0] + ' verification')
-  t.is(ed25519.verify(Buffer.from(signatures[1], 'hex'), Buffer.from(messages[1], 'hex'), Buffer.from(publicKeys[1], 'hex')), true, 'Message ' + messages[1] + ' verification')
-  t.is(ed25519.verify(Buffer.from(signatures[2], 'hex'), Buffer.from(messages[2], 'hex'), Buffer.from(publicKeys[2], 'hex')), true, 'Message ' + messages[2] + ' verification')
-  t.is(ed25519.verify(Buffer.from(signatures[3], 'hex'), Buffer.from(messages[3], 'hex'), Buffer.from(publicKeys[3], 'hex')), true, 'Message ' + messages[3] + ' verification')
+  t.is(ed25519.verify(hexStringToByte(signatures[0]), hexStringToByte(messages[0]), hexStringToByte(publicKeys[0])), true, 'Message ' + messages[0] + ' verification')
+  t.is(ed25519.verify(hexStringToByte(signatures[1]), hexStringToByte(messages[1]), hexStringToByte(publicKeys[1])), true, 'Message ' + messages[1] + ' verification')
+  t.is(ed25519.verify(hexStringToByte(signatures[2]), hexStringToByte(messages[2]), hexStringToByte(publicKeys[2])), true, 'Message ' + messages[2] + ' verification')
+  t.is(ed25519.verify(hexStringToByte(signatures[3]), hexStringToByte(messages[3]), hexStringToByte(publicKeys[3])), true, 'Message ' + messages[3] + ' verification')
 
   t.end()
 })
