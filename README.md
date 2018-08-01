@@ -2,8 +2,7 @@
 
 
 
-[warchant/ed25519](https://github.com/warchant/ed25519.git) compiled with [Emscripten](https://github.com/kripken/emscripten) and wrapper for it.
-Use wisely in your node package.
+[https://github.com/hyperledger/iroha-ed25519](https://github.com/warchant/ed25519.git) compiled with [Emscripten](https://github.com/kripken/emscripten) and wrapper for it.
 
 ## Installation
 Yarn: `yarn add ed25519.js`
