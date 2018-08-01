@@ -1,6 +1,10 @@
 "use strict";
+/**
+ * Copyright Soramitsu Co., Ltd. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
-var Module = require('./lib/ed25519.min.js');
+var Module = require("./lib/ed25519.min.js");
 exports.createKeyPair = function () {
     var pubKeyPtr = Module._malloc(32);
     var pubKey = new Uint8Array(Module.HEAPU8.buffer, pubKeyPtr, 32);

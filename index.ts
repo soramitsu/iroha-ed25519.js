@@ -1,4 +1,10 @@
-const Module = require('./lib/ed25519.min.js');
+/**
+ * Copyright Soramitsu Co., Ltd. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { Buffer } from 'buffer';
+import * as Module from './lib/ed25519.min.js';
 
 export const createKeyPair = (): { publicKey: Buffer, privateKey: Buffer } => {
   const pubKeyPtr = Module._malloc(32);

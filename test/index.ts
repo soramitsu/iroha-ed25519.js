@@ -1,5 +1,10 @@
-const test = require('tape');
-const ed25519 = require('..');
+/**
+ * Copyright Soramitsu Co., Ltd. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import * as test from 'tape';
+import * as ed25519 from '..';
 
 const privateKeys = [
   '9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60',
