@@ -6,7 +6,7 @@
             "es5",
             "dom"
         ],
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "strictNullChecks": true,
         "sourceMap": true,
         "declaration": true,

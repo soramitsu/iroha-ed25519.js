@@ -1,10 +1,12 @@
 {
   "name": "ed25519.js",
-  "version": "1.1.0",
-  "description": "A javascript port and wrapper of https://github.com/warchant/ed25519.git",
+  "version": "1.2.0",
+  "description": "A typescript/javascript port of https://github.com/hyperledger/iroha-ed25519",
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
+    "precommit": "npm test",
+    "prepush": "npm test",
     "docs": "npx typedoc --out doc --module commonjs --target ES5 --ignoreCompilerErrors --excludeExternals --hideGenerator --excludePrivate ./index.ts",
     "lint": "npx tslint -e **/node_modules/** -e **/dist/** index.ts test/index.ts",
     "build": "npx tsc -p ./tsconfig.json",
@@ -12,25 +14,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/laSinteZ/ed25519.js.git"
+    "url": "git+https://github.com/soramitsu/iroha-ed25519.js"
   },
   "author": "Vyacheslav Bikbaev <la.sintez@gmail.com>",
   "license": "Apache-2.0",
   "devDependencies": {
+    "husky": "^0.14.3",
     "tap-spec": "5.0.0",
+    "tape": "^4.9.1",
     "ts-node": "7.0.0",
     "tslint": "5.11.0",
     "tslint-config-standard": "7.1.0",
     "typedoc": "0.11.1",
     "typescript": "2.9.2"
   },
-  "standard": {
-    "ignore": [
-      "/lib/*.js"
-    ]
-  },
   "dependencies": {
-    "@types/node": "10.5.2",
-    "tape": "4.9.1"
+    "buffer": "^5.2.0"
   }
 }
